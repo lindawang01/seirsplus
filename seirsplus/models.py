@@ -1093,17 +1093,17 @@ class SEIRSNetworkModel():
         if(isolate == True):
             if(self.X[node] == self.E):
                 self.X[node] = self.Q_E
-                self.timer_state = 0
+                self.timer_state[node] = 0
             elif(self.X[node] == self.I):
                 self.X[node] = self.Q_I
-                self.timer_state = 0
+                self.timer_state[node] = 0
         elif(isolate == False):
             if(self.X[node] == self.Q_E):
                 self.X[node] = self.E
-                self.timer_state = 0
+                self.timer_state[node] = 0
             elif(self.X[node] == self.Q_I):
                 self.X[node] = self.I
-                self.timer_state = 0
+                self.timer_stat[node] = 0
         # Reset the isolation timer:
         self.timer_isolation[node] = 0
 
@@ -1244,6 +1244,9 @@ class SEIRSNetworkModel():
             self.X[transitionNode] = self.transitions[transitionType]['newState']
 
             self.testedInCurrentState[transitionNode] = False
+
+            print(f"Before assignment: timer_state type: {type(self.timer_state)}, shape: {self.timer_state.shape}")
+            print(f"transitionNode: {transitionNode}")
 
             self.timer_state[transitionNode] = 0.0
 
