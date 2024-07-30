@@ -1103,7 +1103,7 @@ class SEIRSNetworkModel():
                 self.timer_state[node] = 0
             elif(self.X[node] == self.Q_I):
                 self.X[node] = self.I
-                self.timer_stat[node] = 0
+                self.timer_state[node] = 0
         # Reset the isolation timer:
         self.timer_isolation[node] = 0
 

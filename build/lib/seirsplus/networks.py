@@ -47,7 +47,7 @@ def generate_workplace_contact_network(num_cohorts=1, num_nodes_per_cohort=100, 
     # Establish inter-cohort contacts:
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    cohortsAdjMatrices = [networkx.adj_matrix(cohortNetwork) for cohortNetwork in cohortNetworks]
+    cohortsAdjMatrices = [networkx.adjacency_matrix(cohortNetwork) for cohortNetwork in cohortNetworks]
 
     workplaceAdjMatrix = scipy.sparse.block_diag(cohortsAdjMatrices)
     workplaceNetwork   = networkx.from_scipy_sparse_matrix(workplaceAdjMatrix)
@@ -442,19 +442,19 @@ def generate_demographic_contact_network(N, demographic_data, layer_generator='F
                         print(layerGroup+" public mean degree = "+str((meanDegree)))
                         print(layerGroup+" public max degree  = "+str((maxDegree)))
 
-                    adjMatrices.append(networkx.adj_matrix(layerInfo['graph']))
+                    adjMatrices.append(networkx.adjacency_matrix(layerInfo['graph']))
 
                     # Create an adjacency matrix mask that will zero out all public edges
                     # for any isolation groups but allow all public edges for other groups:
                     if(layerGroup in isolation_groups):
-                        adjMatrices_isolation_mask.append(numpy.zeros(shape=networkx.adj_matrix(layerInfo['graph']).shape))
+                        adjMatrices_isolation_mask.append(numpy.zeros(shape=networkx.adjacency_matrix(layerInfo['graph']).shape))
                     else:
                         # adjMatrices_isolation_mask.append(numpy.ones(shape=networkx.adj_matrix(layerInfo['graph']).shape))
                         # The graph layer we just created represents the baseline (no dist) public connections;
                         # this should be the superset of all connections that exist in any modification of the network,
                         # therefore it should work to use this baseline adj matrix as the mask instead of a block of 1s 
                         # (which uses unnecessary memory to store a whole block of 1s, ie not sparse)
-                        adjMatrices_isolation_mask.append(networkx.adj_matrix(layerInfo['graph']))
+                        adjMatrices_isolation_mask.append(networkx.adjacency_matrix(layerInfo['graph']))
 
                     graph_generated = True
 
@@ -535,7 +535,7 @@ def generate_demographic_contact_network(N, demographic_data, layer_generator='F
         # and create graphs corresponding to the isolation intervention for each distancing level:
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         for graphName, graph in graphs.items():
-            A_withIsolation = scipy.sparse.csr_matrix.multiply( networkx.adj_matrix(graph), A_isolation_mask )
+            A_withIsolation = scipy.sparse.csr_matrix.multiply( networkx.adjacency_matrix(graph), A_isolation_mask )
             graphs[graphName+'_isolation'] = networkx.from_scipy_sparse_matrix(A_withIsolation)
 
     
@@ -589,7 +589,7 @@ def generate_demographic_contact_network(N, demographic_data, layer_generator='F
             print(graphName+": number of connected components = {0:d}".format(numConnectedComps))
             print(graphName+": largest connected component = {0:d}".format(len(largestConnectedComp)))
             for layerGroup, layerInfo in layer_info.items():
-                nodeDegrees_group = networkx.adj_matrix(graph)[min(layerInfo['indices']):max(layerInfo['indices']), :].sum(axis=1)
+                nodeDegrees_group = networkx.adjacency_matrix(graph)[min(layerInfo['indices']):max(layerInfo['indices']), :].sum(axis=1)
                 print("\t"+graphName+": "+layerGroup+" final graph mean degree = "+str(numpy.mean(nodeDegrees_group)))
                 print("\t"+graphName+": "+layerGroup+" final graph max degree  = "+str(numpy.max(nodeDegrees_group)))
                 pyplot.hist(nodeDegrees_group, bins=range(int(max(nodeDegrees_group))), alpha=0.5, label=layerGroup)

@@ -1,4 +1,4 @@
-Metadata-Version: 1.0
+Metadata-Version: 2.1
 Name: seirsplus
 Version: 1.0.9
 Summary: Models of SEIRS epidemic dynamics with extensions, including network-structured populations, testing, contact tracing, and social distancing.
@@ -6,5 +6,7 @@ Home-page: https://github.com/ryansmcgee/SEIRS-network-model
 Author: Ryan Seamus McGee
 Author-email: ryansmcgee@gmail.com
 License: MIT
-Description: UNKNOWN
-Platform: UNKNOWN
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: networkx
